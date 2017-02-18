@@ -19,8 +19,17 @@ public:
 	static void VisionThread() {
 		visionCam = CameraServer::GetInstance()->StartAutomaticCapture(0);
 		CameraServer::GetInstance()->StartAutomaticCapture(1);
+		visionCam.SetResolution(640, 480);
+		cs::CvSink cvSink = CameraServer::GetInstance()->GetVideo(visionCam.GetName());
+		cs::CvSource outputStreamStd = CameraServer::GetInstance()->PutVideo("Test", 640, 480);
+		cv::Mat source;
+		cv::Mat output;
+		while (true) {
+			cvSink.GrabFrame(source);
+			cv::cvtColor(source, output, cv::COLOR_BGR2GRAY);
+			outputStreamStd.PutFrame(output);
+		}
 
-		//visionCam.SetResolution()
 	}
 
 	void RobotInit() override {
