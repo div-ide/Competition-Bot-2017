@@ -9,7 +9,7 @@ private:
 	JoystickButton* btn1;
 	JoystickButton* btn2;
 	JoystickButton* btn7;
-	JoystickButton* btn11;
+	JoystickButton* btn6;
 public:
 	OI();
 	Joystick* GetJoystick();

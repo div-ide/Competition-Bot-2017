@@ -35,7 +35,7 @@ bool GearSleeve::CheckLoadedStatus() {
 		loadedSwitch = new frc::DigitalInput(GEAR_STATUS_SWITCH);
 		definedYet = true;
 	}
-	isLoaded = loadedSwitch->Get();
+	isLoaded = !loadedSwitch->Get();
 	frc::SmartDashboard::PutBoolean("Gear Loaded?", isLoaded);
 	return isLoaded;
 }

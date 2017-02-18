@@ -11,7 +11,7 @@ private:
 	// for methods that implement subsystem capabilities
 	bool definedYet;
 	bool controlsSwapped;
-	const double pi;
+	const double pi = 3.14159265358979323846;
 	RobotDrive* driveBase;
 	Encoder* leftEncoder;
 	Encoder* rightEncoder;

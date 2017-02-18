@@ -4,7 +4,6 @@
 DriveTrain::DriveTrain() : Subsystem("DriveTrain") {
 	definedYet = false;
 	controlsSwapped = false;
-	pi = 3.14159265358979323846;
 }
 
 void DriveTrain::InitDefaultCommand() {
@@ -35,10 +34,10 @@ void DriveTrain::Drive(double acceleration, double steering) {
 	double speedKph = speed*3600*2.54/100000;
 	frc::SmartDashboard::PutNumber("Speed (in/s)", speed);
 	frc::SmartDashboard::PutNumber("Speed (Km/s)", speedKph);
-	frc::SmartDashboard::PutNumber("Gyro (Radians)", ((gyro->GetAngle()/360)*2*pi)%(2*pi));
-	frc::SmartDashboard::PutBoolean("Controls Swapped?", controlsSwapped);
+	frc::SmartDashboard::PutNumber("Gyro (Radians)", ((gyro->GetAngle()/360)*2*pi));
 }
 
 void DriveTrain::SwapControls() {
 	controlsSwapped = !controlsSwapped;
+	frc::SmartDashboard::PutBoolean("Controls Swapped?", controlsSwapped);
 }
