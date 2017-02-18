@@ -46,6 +46,9 @@ public:
 
 	void TeleopPeriodic() override {
 		frc::Scheduler::GetInstance()->Run();
+
+		CommandBase::gearsleeve->CheckLoadedStatus();
+
 		double volts = pdp->GetVoltage();
 		double totalCurrent = pdp->GetTotalCurrent();
 		double current0 = pdp->GetCurrent(0);
