@@ -11,13 +11,16 @@ private:
 	// for methods that implement subsystem capabilities
 	bool definedYet;
 	bool isUp;
+	bool isLoaded;
 	double downPoint = 0.75;
 	double upPoint = 0.3;
 	Servo* gearServo;
+	DigitalInput* loadedSwitch;
 public:
 	GearSleeve();
 	void InitDefaultCommand();
 	void Toggle();
+	bool CheckLoadedStatus();
 };
 
 #endif  // GearSleeve_H
