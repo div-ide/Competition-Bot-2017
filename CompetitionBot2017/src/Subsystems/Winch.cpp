@@ -16,4 +16,5 @@ void Winch::SetMotorPower(double power) {
 		definedYet = true;
 	}
 	winchMotor->Set(-power);
+	frc::SmartDashboard::PutNumber("Winch Power", power);
 }
