@@ -3,12 +3,11 @@
 SwapJoystick::SwapJoystick() {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
-	Requires(drivetrain.get());
 }
 
 // Called just before this Command runs the first time
 void SwapJoystick::Initialize() {
-	drivetrain->SwapControls();
+	CommandBase::drivetrain->SwapControls();
 }
 
 // Called repeatedly when this Command is scheduled to run

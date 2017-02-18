@@ -8,17 +8,16 @@ ClimbRope::ClimbRope() {
 
 // Called just before this Command runs the first time
 void ClimbRope::Initialize() {
-	winch->SetMotorPower(1.0);
 }
 
 // Called repeatedly when this Command is scheduled to run
 void ClimbRope::Execute() {
-
+	winch->SetMotorPower(1.0);
 }
 
 // Make this return true when this Command no longer needs to run execute()
 bool ClimbRope::IsFinished() {
-	return true;
+	return CommandBase::oi->GetJoystick()->GetRawButton(8);
 }
 
 // Called once after isFinished returns true
