@@ -10,6 +10,7 @@ private:
 	// It's desirable that everything possible under private except
 	// for methods that implement subsystem capabilities
 	bool definedYet;
+	bool controlsSwapped = false;
 	RobotDrive* driveBase;
 	Encoder* leftEncoder;
 	Encoder* rightEncoder;
@@ -18,6 +19,7 @@ public:
 	DriveTrain();
 	void InitDefaultCommand();
 	void Drive(double acceleration, double steering);
+	void SwapControls();
 };
 
 #endif  // DriveTrain_H

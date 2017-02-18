@@ -3,6 +3,7 @@
 
 DriveTrain::DriveTrain() : Subsystem("DriveTrain") {
 	definedYet = false;
+	controlsSwapped = false;
 }
 
 void DriveTrain::InitDefaultCommand() {
@@ -23,12 +24,19 @@ void DriveTrain::Drive(double acceleration, double steering) {
 		rightEncoder->SetSamplesToAverage(7);
 		definedYet = true;
 	}
+	if (controlsSwapped) {
+		acceleration = -acceleration;
+	}
 	driveBase->ArcadeDrive(acceleration, steering);
 	frc::SmartDashboard::PutNumber("leftEncoder", ((double)leftEncoder->GetRaw()/1440)*6*3.14159);
 	frc::SmartDashboard::PutNumber("rightEncoder", ((double)rightEncoder->GetRaw()/1440)*6*3.14159);
-	double speed = (((double)leftEncoder->GetRaw()/1440)*6*3.14159+((double)rightEncoder->GetRaw()/1440)*6*3.14159)/2;
-	double speedKph = speed*3600*254/100000;
+	double speed = (((double)leftEncoder->GetRate()/1440)*6*3.14159+((double)rightEncoder->GetRate()/1440)*6*3.14159)/2;
+	double speedKph = speed*3600*2.54/100000;
 	frc::SmartDashboard::PutNumber("speed", speed);
 	frc::SmartDashboard::PutNumber("speedKph", speedKph);
 	frc::SmartDashboard::PutNumber("gyroRadians", (gyro->GetAngle()/360)*2*3.14159);
+}
+
+void DriveTrain::SwapControls() {
+	controlsSwapped = !controlsSwapped;
 }
