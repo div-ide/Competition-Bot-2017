@@ -7,15 +7,25 @@
 #include <SmartDashboard/SendableChooser.h>
 #include <SmartDashboard/SmartDashboard.h>
 
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core/core.hpp>
+
 #include <Commands/DriveWithJoystick.h>
 
 #include "CommandBase.h"
 
 class Robot: public frc::IterativeRobot {
 public:
-	void RobotInit() override {
-		CameraServer::GetInstance()->StartAutomaticCapture(0);
+	static void VisionThread() {
+		visionCam = CameraServer::GetInstance()->StartAutomaticCapture(0);
 		CameraServer::GetInstance()->StartAutomaticCapture(1);
+
+		//visionCam.SetResolution()
+	}
+
+	void RobotInit() override {
+		std::thread visionThread(VisionThread);
+		visionThread.detach();
 	}
 
 	/**
@@ -50,7 +60,7 @@ public:
 		CommandBase::gearsleeve->CheckLoadedStatus();
 
 		double volts = pdp->GetVoltage();
-		//double totalCurrent = pdp->GetTotalCurrent();
+		double totalCurrent = pdp->GetTotalCurrent();
 		//double current0 = pdp->GetCurrent(0);
 		//double current1 = pdp->GetCurrent(1);
 		//double current2 = pdp->GetCurrent(2);
@@ -58,8 +68,8 @@ public:
 		//double current12 = pdp->GetCurrent(12);
 		//double totalPower = volts*totalCurrent;
 
-		SmartDashboard::PutNumber("BatteryVoltage", volts);
-		//SmartDashboard::PutNumber("TotalCurrent", totalCurrent);
+		SmartDashboard::PutNumber("Battery Voltage", volts);
+		SmartDashboard::PutNumber("Total Current", totalCurrent);
 		//SmartDashboard::PutNumber("TotalPower", totalPower);
 		//SmartDashboard::PutNumber("Current 0", current0);
 		//SmartDashboard::PutNumber("Current 1", current1);
@@ -73,6 +83,7 @@ public:
 	}
 
 private:
+	cs::UsbCamera visionCam;
 	Command* driveWithJoystick;
 	PowerDistributionPanel* pdp;
 	frc::SendableChooser<frc::Command*> chooser;
