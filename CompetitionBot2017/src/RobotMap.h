@@ -8,16 +8,21 @@
  * floating around.
  */
 
-// For example to map the left and right motors, you could define the
-// following variables to use with your drivetrain subsystem.
-// constexpr int LEFTMOTOR = 1;
-// constexpr int RIGHTMOTOR = 2;
+// Motors
 
-// If you are using multiple modules, make sure to define both the port
-// number and the module. For example you with a rangefinder:
-// constexpr int RANGE_FINDER_PORT = 1;
-// constexpr int RANGE_FINDER_MODULE = 1;
+const int DRIVE_MOTOR_LF = 0;
+const int DRIVE_MOTOR_LR = 1;
+const int DRIVE_MOTOR_RF = 2;
+const int DRIVE_MOTOR_RR = 3;
+const int GEAR_SERVO = 4;
+const int WINCH_MOTOR = 5;
 
-constexpr int WINCH_MOTOR_CONTROLLER_PORT = 5;
+// Sensors and Inputs
+
+const int DRIVE_ENCODER_LA = 0;
+const int DRIVE_ENCODER_LB = 1;
+const int DRIVE_ENCODER_RA = 2;
+const int DRIVE_ENCODER_RB = 3;
+const int GEAR_STATUS_SWITCH = 4;
 
 #endif  // ROBOTMAP_H

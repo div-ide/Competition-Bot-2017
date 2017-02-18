@@ -31,8 +31,8 @@ void GearSleeve::Toggle() {
 
 bool GearSleeve::CheckLoadedStatus() {
 	if (!definedYet) {
-		gearServo = new frc::Servo(4);
-		loadedSwitch = new frc::DigitalInput(4);
+		gearServo = new frc::Servo(GEAR_SERVO);
+		loadedSwitch = new frc::DigitalInput(GEAR_STATUS_SWITCH);
 		definedYet = true;
 	}
 	isLoaded = loadedSwitch->Get();

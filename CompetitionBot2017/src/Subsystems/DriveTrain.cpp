@@ -14,9 +14,9 @@ void DriveTrain::InitDefaultCommand() {
 
 void DriveTrain::Drive(double acceleration, double steering) {
 	if (!definedYet) {
-		driveBase = new frc::RobotDrive(0, 1, 2, 3);
-		leftEncoder = new frc::Encoder(0, 1);
-		rightEncoder = new frc::Encoder(2, 3);
+		driveBase = new frc::RobotDrive(DRIVE_MOTOR_LF, DRIVE_MOTOR_LR, DRIVE_MOTOR_RF, DRIVE_MOTOR_RR);
+		leftEncoder = new frc::Encoder(DRIVE_ENCODER_LA, DRIVE_ENCODER_LB);
+		rightEncoder = new frc::Encoder(DRIVE_ENCODER_RA, DRIVE_ENCODER_RB);
 		gyro = new frc::ADXRS450_Gyro();
 		leftEncoder->SetDistancePerPulse(6*3.14159);
 		rightEncoder->SetDistancePerPulse(6*3.14159);
