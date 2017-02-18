@@ -20,11 +20,11 @@ void GearSleeve::Toggle() {
 		gearServo->Set(downPoint);
 		frc::Wait(0.8);
 		gearServo->StopMotor();
-		frc::SmartDashboard::PutString("Gear Position", "Down");
+		frc::SmartDashboard::PutBoolean("Gear Up", false);
 		isUp = false;
 	} else {
 		gearServo->Set(upPoint);
-		frc::SmartDashboard::PutString("Gear Position", "Up");
+		frc::SmartDashboard::PutBoolean("Gear Up", true);
 		isUp = true;
 	}
 }

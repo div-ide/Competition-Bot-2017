@@ -12,7 +12,7 @@ void Winch::InitDefaultCommand() {
 
 void Winch::SetMotorPower(double power) {
 	if (!definedYet) {
-		winchMotor = new VictorSP(5);
+		winchMotor = new frc::VictorSP(5);
 		definedYet = true;
 	}
 	winchMotor->Set(-power);

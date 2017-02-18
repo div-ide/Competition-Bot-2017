@@ -13,6 +13,7 @@ private:
 	RobotDrive* driveBase;
 	Encoder* leftEncoder;
 	Encoder* rightEncoder;
+	ADXRS450_Gyro* gyro;
 public:
 	DriveTrain();
 	void InitDefaultCommand();

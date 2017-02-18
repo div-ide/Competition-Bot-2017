@@ -41,7 +41,7 @@ public:
 	void TeleopInit() override {
 		driveWithJoystick = new DriveWithJoystick();
 		driveWithJoystick->Start();
-		pdp = new PowerDistributionPanel();
+		pdp = new PowerDistributionPanel(0);
 	}
 
 	void TeleopPeriodic() override {
@@ -54,6 +54,7 @@ public:
 		double current3 = pdp->GetCurrent(3);
 		double current12 = pdp->GetCurrent(12);
 		double totalPower = volts*totalCurrent;
+
 		SmartDashboard::PutNumber("BatteryVoltage", volts);
 		SmartDashboard::PutNumber("TotalCurrent", totalCurrent);
 		SmartDashboard::PutNumber("TotalPower", totalPower);
