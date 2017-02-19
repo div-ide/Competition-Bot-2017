@@ -6,6 +6,7 @@
 #include <LiveWindow/LiveWindow.h>
 #include <SmartDashboard/SendableChooser.h>
 #include <SmartDashboard/SmartDashboard.h>
+#include "GripPipeline.h"
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
@@ -17,17 +18,21 @@
 class Robot: public frc::IterativeRobot {
 public:
 	static void VisionThread() {
-		visionCam = CameraServer::GetInstance()->StartAutomaticCapture(0);
-		CameraServer::GetInstance()->StartAutomaticCapture(1);
-		visionCam.SetResolution(640, 480);
+		cs::UsbCamera visionCam = CameraServer::GetInstance()->StartAutomaticCapture(1);
+		CameraServer::GetInstance()->StartAutomaticCapture(0);
+		visionCam.SetResolution(320, 240);
+		visionCam.SetExposureAuto();
 		cs::CvSink cvSink = CameraServer::GetInstance()->GetVideo(visionCam.GetName());
-		cs::CvSource outputStreamStd = CameraServer::GetInstance()->PutVideo("Test", 640, 480);
+		cs::CvSource outputStreamStd = CameraServer::GetInstance()->PutVideo("CV Marks", 320, 240);
 		cv::Mat source;
 		cv::Mat output;
+		grip::GripPipeline pipeline;
 		while (true) {
 			cvSink.GrabFrame(source);
-			cv::cvtColor(source, output, cv::COLOR_BGR2GRAY);
+			pipeline.Process(source);
+			output = pipeline.GetMaskOutput();
 			outputStreamStd.PutFrame(output);
+			frc::SmartDashboard::PutNumber("Contour0 x", pipeline.GetFilterContoursOutput()[0][0][0].x);
 		}
 
 	}
@@ -69,7 +74,7 @@ public:
 		CommandBase::gearsleeve->CheckLoadedStatus();
 
 		double volts = pdp->GetVoltage();
-		double totalCurrent = pdp->GetTotalCurrent();
+		//double totalCurrent = pdp->GetTotalCurrent();
 		//double current0 = pdp->GetCurrent(0);
 		//double current1 = pdp->GetCurrent(1);
 		//double current2 = pdp->GetCurrent(2);
@@ -78,7 +83,7 @@ public:
 		//double totalPower = volts*totalCurrent;
 
 		SmartDashboard::PutNumber("Battery Voltage", volts);
-		SmartDashboard::PutNumber("Total Current", totalCurrent);
+		//SmartDashboard::PutNumber("Total Current", totalCurrent);
 		//SmartDashboard::PutNumber("TotalPower", totalPower);
 		//SmartDashboard::PutNumber("Current 0", current0);
 		//SmartDashboard::PutNumber("Current 1", current1);
@@ -92,10 +97,8 @@ public:
 	}
 
 private:
-	cs::UsbCamera visionCam;
 	Command* driveWithJoystick;
 	PowerDistributionPanel* pdp;
-	frc::SendableChooser<frc::Command*> chooser;
 };
 
 START_ROBOT_CLASS(Robot)

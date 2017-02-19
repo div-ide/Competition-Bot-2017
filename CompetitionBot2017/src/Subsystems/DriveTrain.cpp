@@ -32,8 +32,8 @@ void DriveTrain::Drive(double acceleration, double steering) {
 	frc::SmartDashboard::PutNumber("Right Encoder (Raw)", ((double)rightEncoder->GetRaw()/1440)*6*pi);
 	double speed = (((double)leftEncoder->GetRate()/1440)*6*pi+((double)rightEncoder->GetRate()/1440)*6*pi)/2;
 	double speedKph = speed*3600*2.54/100000;
-	frc::SmartDashboard::PutNumber("Speed (in/s)", speed);
-	frc::SmartDashboard::PutNumber("Speed (Km/s)", speedKph);
+	frc::SmartDashboard::PutNumber("Speed (in\s)", speed);
+	frc::SmartDashboard::PutNumber("Speed (Km\s)", speedKph);
 	frc::SmartDashboard::PutNumber("Gyro (Radians)", ((gyro->GetAngle()/360)*2*pi));
 }
 
