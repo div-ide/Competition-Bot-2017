@@ -21,7 +21,7 @@ public:
 		cs::UsbCamera visionCam = CameraServer::GetInstance()->StartAutomaticCapture(1);
 		CameraServer::GetInstance()->StartAutomaticCapture(0);
 		visionCam.SetResolution(320, 240);
-		visionCam.SetExposureAuto();
+		visionCam.SetExposureManual(31);
 		cs::CvSink cvSink = CameraServer::GetInstance()->GetVideo(visionCam.GetName());
 		cs::CvSource outputStreamStd = CameraServer::GetInstance()->PutVideo("CV Marks", 320, 240);
 		cv::Mat source;
