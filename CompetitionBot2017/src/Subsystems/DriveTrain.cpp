@@ -2,8 +2,6 @@
 #include "../RobotMap.h"
 
 DriveTrain::DriveTrain() : Subsystem("DriveTrain") {
-	definedYet = false;
-	controlsSwapped = false;
 }
 
 void DriveTrain::InitDefaultCommand() {
@@ -50,4 +48,9 @@ double DriveTrain::GetEncoderAverageDistance() {
 
 double DriveTrain::GetGyroAngle() {
 	return gyro->GetAngle();
+}
+
+void DriveTrain::Reset() {
+	controlsSwapped = false;
+	isInUse = false;
 }

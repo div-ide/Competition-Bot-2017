@@ -2,7 +2,6 @@
 #include "../RobotMap.h"
 
 Winch::Winch() : Subsystem("Winch") {
-	definedYet = false;
 }
 
 void Winch::InitDefaultCommand() {
@@ -17,4 +16,8 @@ void Winch::SetMotorPower(double power) {
 	}
 	winchMotor->Set(-power);
 	frc::SmartDashboard::PutNumber("Winch Power", power);
+}
+
+void Winch::Reset() {
+	winchMotor->Set(0.0);
 }

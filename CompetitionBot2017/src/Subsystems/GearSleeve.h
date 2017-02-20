@@ -9,10 +9,10 @@ class GearSleeve : public Subsystem {
 private:
 	// It's desirable that everything possible under private except
 	// for methods that implement subsystem capabilities
-	bool definedYet;
-	bool isUp;
-	bool isUpStatus;
-	bool isLoaded;
+	bool definedYet = false;
+	bool isUp = false;
+	bool isUpStatus = false;
+	bool isLoaded = false;
 	double downPoint = 0.85;
 	double upPoint = 0.35;
 	Servo* gearServo;
@@ -23,6 +23,7 @@ public:
 	void Toggle();
 	void Raise();
 	bool CheckLoadedStatus();
+	void Reset();
 };
 
 #endif  // GearSleeve_H

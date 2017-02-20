@@ -10,12 +10,12 @@ private:
 	// It's desirable that everything possible under private except
 	// for methods that implement subsystem capabilities
 	VictorSP* winchMotor;
-	bool definedYet;
-	//RobotDrive* rDrive;
+	bool definedYet = false;
 public:
 	Winch();
 	void InitDefaultCommand();
 	void SetMotorPower(double power);
+	void Reset();
 };
 
 #endif  // Winch_H

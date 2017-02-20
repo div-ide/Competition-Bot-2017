@@ -9,14 +9,14 @@ class DriveTrain : public Subsystem {
 private:
 	// It's desirable that everything possible under private except
 	// for methods that implement subsystem capabilities
-	bool definedYet;
+	bool definedYet = false;
 	const double pi = 3.14159265358979323846;
 	RobotDrive* driveBase;
 	Encoder* leftEncoder;
 	Encoder* rightEncoder;
 	ADXRS450_Gyro* gyro;
 public:
-	bool controlsSwapped;
+	bool controlsSwapped = false;
 	bool isInUse = false;
 	bool targetFound = false;
 	double targetRange = 0.0;
@@ -27,6 +27,7 @@ public:
 	void SwapControls();
 	double GetEncoderAverageDistance();
 	double GetGyroAngle();
+	void Reset();
 };
 
 #endif  // DriveTrain_H

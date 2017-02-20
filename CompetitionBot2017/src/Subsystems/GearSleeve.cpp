@@ -2,9 +2,6 @@
 #include "../RobotMap.h"
 
 GearSleeve::GearSleeve() : Subsystem("GearSleeve") {
-	definedYet = false;
-	isUp = false;
-	isLoaded = false;
 }
 
 void GearSleeve::InitDefaultCommand() {
@@ -56,4 +53,13 @@ bool GearSleeve::CheckLoadedStatus() {
 	}
 	frc::SmartDashboard::PutBoolean("Gear Up?", isUpStatus);
 	return isLoaded;
+}
+
+void GearSleeve::Reset() {
+	gearServo->Set(downPoint);
+	isUp = false;
+	isUpStatus = false;
+	isLoaded = false;
+	frc::SmartDashboard::PutBoolean("Gear Loaded?", isLoaded);
+	frc::SmartDashboard::PutBoolean("Gear Up?", isUpStatus);
 }

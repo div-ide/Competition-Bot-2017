@@ -83,7 +83,11 @@ public:
 	 * the robot is disabled.
 	 */
 	void DisabledInit() override {
-
+		//if (CommandBase::drivetrain.get() != nullptr) {
+		//	CommandBase::drivetrain->Reset();
+		//	CommandBase::gearsleeve->Reset();
+		//	CommandBase::winch->Reset();
+		//}
 	}
 
 	void DisabledPeriodic() override {
