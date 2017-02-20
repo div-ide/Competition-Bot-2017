@@ -66,12 +66,12 @@ public:
 	}
 
 	void RobotInit() override {
-		autoChooser.AddDefault("Red Left", &0);
-		autoChooser.AddObject("Red Center", &1);
-		autoChooser.AddObject("Red Right", &2);
-		autoChooser.AddObject("Blue Left", &3);
-		autoChooser.AddObject("Blue Center", &4);
-		autoChooser.AddObject("Blue Right", &5);
+		autoChooser.AddDefault("Red Left", new AutonomousCommand(0));
+		autoChooser.AddObject("Red Center", new AutonomousCommand(1));
+		autoChooser.AddObject("Red Right", new AutonomousCommand(2));
+		autoChooser.AddObject("Blue Left", new AutonomousCommand(3));
+		autoChooser.AddObject("Blue Center", new AutonomousCommand(4));
+		autoChooser.AddObject("Blue Right", new AutonomousCommand(5));
 		frc::SmartDashboard::PutData("Auto Selector", &autoChooser);
 		std::thread visionThread(VisionThread);
 		visionThread.detach();
@@ -91,7 +91,7 @@ public:
 	}
 
 	void AutonomousInit() override {
-		autonomousCommand = new AutonomousCommand(autoChooser.GetSelected());
+		autonomousCommand = autoChooser.GetSelected();
 		autonomousCommand->Start();
 	}
 
@@ -138,7 +138,7 @@ private:
 	Command* autonomousCommand;
 	Command* driveWithJoystick;
 	PowerDistributionPanel* pdp;
-	frc::SendableChooser<int*> autoChooser;
+	frc::SendableChooser<frc::Command*> autoChooser;
 };
 
 START_ROBOT_CLASS(Robot)
