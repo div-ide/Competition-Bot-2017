@@ -19,7 +19,7 @@ OI::OI() {
 	btn12->WhenReleased(new StopClimbingRope());
 	btn11->WhenPressed(new SwapJoystick());
 	btn9->WhenPressed(new FullAutoPlaceGear());
-	btn10->WhenPressed(new AutonomousCommand(0));
+	//btn10->WhenPressed(new AutonomousCommand(0));
 }
 
 Joystick* OI::GetJoystick() {

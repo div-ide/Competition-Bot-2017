@@ -72,7 +72,7 @@ public:
 		autoChooser.AddObject("Blue Left", new AutonomousCommand(3));
 		autoChooser.AddObject("Blue Center", new AutonomousCommand(4));
 		autoChooser.AddObject("Blue Right", new AutonomousCommand(5));
-		frc::SmartDashboard::PutData("Auto Selector", &autoChooser);
+		frc::SmartDashboard::PutData("Drive Station", &autoChooser);
 		std::thread visionThread(VisionThread);
 		visionThread.detach();
 	}
@@ -91,8 +91,10 @@ public:
 	}
 
 	void AutonomousInit() override {
-		autonomousCommand = autoChooser.GetSelected();
-		autonomousCommand->Start();
+		autonomousCommand.reset(autoChooser.GetSelected());
+		if (autonomousCommand.get() != nullptr) {
+			autonomousCommand->Start();
+		}
 	}
 
 	void AutonomousPeriodic() override {
@@ -100,7 +102,9 @@ public:
 	}
 
 	void TeleopInit() override {
-		autonomousCommand->Cancel();
+		if (autonomousCommand.get() != nullptr) {
+			autonomousCommand->Cancel();
+		}
 		driveWithJoystick = new DriveWithJoystick();
 		driveWithJoystick->Start();
 		pdp = new PowerDistributionPanel(0);
@@ -135,7 +139,7 @@ public:
 	}
 
 private:
-	Command* autonomousCommand;
+	std::unique_ptr<frc::Command> autonomousCommand;
 	Command* driveWithJoystick;
 	PowerDistributionPanel* pdp;
 	frc::SendableChooser<frc::Command*> autoChooser;
