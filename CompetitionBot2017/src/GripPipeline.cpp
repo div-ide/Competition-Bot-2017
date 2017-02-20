@@ -11,9 +11,9 @@ void GripPipeline::Process(cv::Mat& source0){
 	//Step HSL_Threshold0:
 	//input
 	cv::Mat hslThresholdInput = source0;
-	double hslThresholdHue[] = {44.32374100719424, 105.20819112627989};
-	double hslThresholdSaturation[] = {50.44964028776978, 255.0};
-	double hslThresholdLuminance[] = {165.10791366906471, 255.0};
+	double hslThresholdHue[] = {40.0, 110.0};
+	double hslThresholdSaturation[] = {50.0, 255.0};
+	double hslThresholdLuminance[] = {50.0, 255.0};
 	hslThreshold(hslThresholdInput, hslThresholdHue, hslThresholdSaturation, hslThresholdLuminance, this->hslThresholdOutput);
 	//Step CV_erode0:
 	//input
@@ -32,12 +32,12 @@ void GripPipeline::Process(cv::Mat& source0){
 	//Step Filter_Contours0:
 	//input
 	std::vector<std::vector<cv::Point> > filterContoursContours = findContoursOutput;
-	double filterContoursMinArea = 1000.0;  // default Double
+	double filterContoursMinArea = 10.0;  // default Double
 	double filterContoursMinPerimeter = 0.0;  // default Double
 	double filterContoursMinWidth = 0.0;  // default Double
-	double filterContoursMaxWidth = 1000.0;  // default Double
-	double filterContoursMinHeight = 0.0;  // default Double
-	double filterContoursMaxHeight = 1000.0;  // default Double
+	double filterContoursMaxWidth = 100.0;  // default Double
+	double filterContoursMinHeight = 10.0;  // default Double
+	double filterContoursMaxHeight = 100.0;  // default Double
 	double filterContoursSolidity[] = {0, 100};
 	double filterContoursMaxVertices = 1000000.0;  // default Double
 	double filterContoursMinVertices = 0.0;  // default Double
@@ -76,8 +76,8 @@ std::vector<std::vector<cv::Point> >* GripPipeline::GetFindContoursOutput(){
  * This method is a generated getter for the output of a Filter_Contours.
  * @return ContoursReport output from Filter_Contours.
  */
-std::vector<std::vector<cv::Point> >* GripPipeline::GetFilterContoursOutput(){
-	return &(this->filterContoursOutput);
+std::vector<std::vector<cv::Point> > GripPipeline::GetFilterContoursOutput(){
+	return this->filterContoursOutput;
 }
 /**
  * This method is a generated getter for the output of a Mask.

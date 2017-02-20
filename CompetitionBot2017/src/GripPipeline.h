@@ -40,7 +40,7 @@ class GripPipeline : public frc::VisionPipeline {
 		cv::Mat* GetHslThresholdOutput();
 		cv::Mat* GetCvErodeOutput();
 		std::vector<std::vector<cv::Point> >* GetFindContoursOutput();
-		std::vector<std::vector<cv::Point> >* GetFilterContoursOutput();
+		std::vector<std::vector<cv::Point> > GetFilterContoursOutput();
 		cv::Mat GetMaskOutput();
 };
 

@@ -13,17 +13,20 @@
 
 #include <Commands/DriveWithJoystick.h>
 
+#include <Commands/AutonomousCommand.h>
+
 #include "CommandBase.h"
 
 class Robot: public frc::IterativeRobot {
 public:
+
 	static void VisionThread() {
 		cs::UsbCamera visionCam = CameraServer::GetInstance()->StartAutomaticCapture(1);
 		CameraServer::GetInstance()->StartAutomaticCapture(0);
 		visionCam.SetResolution(320, 240);
-		visionCam.SetExposureManual(31);
+		visionCam.SetExposureManual(20);
 		cs::CvSink cvSink = CameraServer::GetInstance()->GetVideo(visionCam.GetName());
-		cs::CvSource outputStreamStd = CameraServer::GetInstance()->PutVideo("CV Marks", 320, 240);
+		cs::CvSource outputStreamStd = CameraServer::GetInstance()->PutVideo("CV Output", 320, 240);
 		cv::Mat source;
 		cv::Mat output;
 		grip::GripPipeline pipeline;
@@ -31,13 +34,45 @@ public:
 			cvSink.GrabFrame(source);
 			pipeline.Process(source);
 			output = pipeline.GetMaskOutput();
+			std::vector<std::vector<cv::Point>> contours = pipeline.GetFilterContoursOutput();
+			frc::SmartDashboard::PutNumber("Contours Found:", contours.size());
+			double D = 8.25;
+			double Sx = 320;
+			double AOV = 64.974;
+			if (contours.size() >= 2) {
+				CommandBase::drivetrain->targetFound = true;
+				cv::Rect lRect = cv::boundingRect(contours[0]);
+				cv::Rect rRect = cv::boundingRect(contours[1]);
+				cv::rectangle(output, lRect, cv::Scalar(0, 0, 255));
+				cv::rectangle(output, rRect, cv::Scalar(255, 0, 0));
+				frc::SmartDashboard::PutNumber("Left CV", lRect.x);
+				frc::SmartDashboard::PutNumber("Right CV", rRect.x);
+				frc::SmartDashboard::PutNumber("Px", std::abs(rRect.x-lRect.x));
+				double Px = std::abs(rRect.x-lRect.x);
+				double d2r = 2*3.14159/360.0;
+				double range = (D/(2.0*std::tan(d2r*(AOV*Px/(2.0*Sx)))))-16.0;
+				frc::SmartDashboard::PutNumber("Target Range", range);
+				CommandBase::drivetrain->targetRange = range;
+				double centeredness = ((rRect.x+lRect.x)/2.0)-160.0;
+				frc::SmartDashboard::PutNumber("Target Center", centeredness);
+				CommandBase::drivetrain->targetCenter = centeredness;
+			} else {
+				CommandBase::drivetrain->targetFound = false;
+			}
+			frc::SmartDashboard::PutBoolean("Target Found", CommandBase::drivetrain->targetFound);
 			outputStreamStd.PutFrame(output);
-			frc::SmartDashboard::PutNumber("Contour0 x", pipeline.GetFilterContoursOutput()[0][0][0].x);
 		}
 
 	}
 
 	void RobotInit() override {
+		autoChooser.AddDefault("Red Left", &0);
+		autoChooser.AddObject("Red Center", &1);
+		autoChooser.AddObject("Red Right", &2);
+		autoChooser.AddObject("Blue Left", &3);
+		autoChooser.AddObject("Blue Center", &4);
+		autoChooser.AddObject("Blue Right", &5);
+		frc::SmartDashboard::PutData("Auto Selector", &autoChooser);
 		std::thread visionThread(VisionThread);
 		visionThread.detach();
 	}
@@ -56,6 +91,8 @@ public:
 	}
 
 	void AutonomousInit() override {
+		autonomousCommand = new AutonomousCommand(autoChooser.GetSelected());
+		autonomousCommand->Start();
 	}
 
 	void AutonomousPeriodic() override {
@@ -63,6 +100,7 @@ public:
 	}
 
 	void TeleopInit() override {
+		autonomousCommand->Cancel();
 		driveWithJoystick = new DriveWithJoystick();
 		driveWithJoystick->Start();
 		pdp = new PowerDistributionPanel(0);
@@ -97,8 +135,10 @@ public:
 	}
 
 private:
+	Command* autonomousCommand;
 	Command* driveWithJoystick;
 	PowerDistributionPanel* pdp;
+	frc::SendableChooser<int*> autoChooser;
 };
 
 START_ROBOT_CLASS(Robot)

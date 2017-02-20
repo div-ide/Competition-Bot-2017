@@ -21,12 +21,26 @@ void GearSleeve::Toggle() {
 	isUp = !isUp;
 	if (isUp) {
 		gearServo->Set(upPoint);
+		isUpStatus = true;
 	} else {
 		gearServo->Set(downPoint);
 		frc::Wait(0.8);
 		gearServo->StopMotor();
+		isUpStatus = false;
 	}
-	frc::SmartDashboard::PutBoolean("Gear Up?", isUp);
+	frc::SmartDashboard::PutBoolean("Gear Up?", isUpStatus);
+}
+
+void GearSleeve::Raise() {
+	if (!definedYet) {
+		gearServo = new frc::Servo(4);
+		loadedSwitch = new frc::DigitalInput(4);
+		definedYet = true;
+	}
+	isUp = true;
+	gearServo->Set(upPoint);
+	isUpStatus = true;
+	frc::SmartDashboard::PutBoolean("Gear Up?", isUpStatus);
 }
 
 bool GearSleeve::CheckLoadedStatus() {
@@ -37,5 +51,9 @@ bool GearSleeve::CheckLoadedStatus() {
 	}
 	isLoaded = !loadedSwitch->Get();
 	frc::SmartDashboard::PutBoolean("Gear Loaded?", isLoaded);
+	if (isUp) {
+		isUpStatus = !isUpStatus;
+	}
+	frc::SmartDashboard::PutBoolean("Gear Up?", isUpStatus);
 	return isLoaded;
 }

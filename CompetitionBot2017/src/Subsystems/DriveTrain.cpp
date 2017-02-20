@@ -27,6 +27,8 @@ void DriveTrain::Drive(double acceleration, double steering) {
 	if (controlsSwapped) {
 		acceleration = -acceleration;
 	}
+	frc::SmartDashboard::PutNumber("Acc", acceleration);
+	frc::SmartDashboard::PutNumber("Steer", steering);
 	driveBase->ArcadeDrive(acceleration, steering);
 	frc::SmartDashboard::PutNumber("Left Encoder (Raw)", ((double)leftEncoder->GetRaw()/1440)*6*pi);
 	frc::SmartDashboard::PutNumber("Right Encoder (Raw)", ((double)rightEncoder->GetRaw()/1440)*6*pi);
@@ -34,10 +36,18 @@ void DriveTrain::Drive(double acceleration, double steering) {
 	double speedKph = speed*3600*2.54/100000;
 	frc::SmartDashboard::PutNumber("Speed (in\s)", speed);
 	frc::SmartDashboard::PutNumber("Speed (Km\s)", speedKph);
-	frc::SmartDashboard::PutNumber("Gyro (Radians)", ((gyro->GetAngle()/360)*2*pi));
+	frc::SmartDashboard::PutNumber("Gyro (Radians)", gyro->GetAngle());
 }
 
 void DriveTrain::SwapControls() {
 	controlsSwapped = !controlsSwapped;
 	frc::SmartDashboard::PutBoolean("Controls Swapped?", controlsSwapped);
+}
+
+double DriveTrain::GetEncoderAverageDistance() {
+	return (((double)leftEncoder->GetRaw()/1440)*6*pi+((double)rightEncoder->GetRaw()/1440)*6*pi)/2;
+}
+
+double DriveTrain::GetGyroAngle() {
+	return gyro->GetAngle();
 }

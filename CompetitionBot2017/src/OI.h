@@ -7,9 +7,11 @@ class OI {
 private:
 	Joystick* stick;
 	JoystickButton* btn1;
-	JoystickButton* btn2;
-	JoystickButton* btn7;
-	JoystickButton* btn6;
+	JoystickButton* btn12;
+	JoystickButton* btn11;
+	JoystickButton* btn9;
+	JoystickButton* btn10;
+
 public:
 	OI();
 	Joystick* GetJoystick();
