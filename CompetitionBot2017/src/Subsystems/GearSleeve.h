@@ -13,8 +13,8 @@ private:
 	bool isUp = false;
 	bool isUpStatus = false;
 	bool isLoaded = false;
-	double downPoint = 0.85;
-	double upPoint = 0.21;
+	double downPoint = 0.8;
+	double upPoint = 0.2;
 	Servo* gearServo;
 	DigitalInput* loadedSwitch;
 public:
