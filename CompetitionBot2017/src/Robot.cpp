@@ -17,6 +17,8 @@
 
 #include "CommandBase.h"
 
+using namespace frc;
+
 class Robot: public frc::IterativeRobot {
 public:
 
@@ -25,7 +27,7 @@ public:
 		CameraServer::GetInstance()->StartAutomaticCapture(0);
 		visionCam.SetResolution(320, 240);
 		visionCam.SetExposureManual(20);
-		cs::CvSink cvSink = CameraServer::GetInstance()->GetVideo(visionCam.GetName());
+		/*cs::CvSink cvSink = CameraServer::GetInstance()->GetVideo(visionCam.GetName());
 		cs::CvSource outputStreamStd = CameraServer::GetInstance()->PutVideo("CV Output", 320, 240);
 		cv::Mat source;
 		cv::Mat output;
@@ -34,6 +36,7 @@ public:
 			cvSink.GrabFrame(source);
 			pipeline.Process(source);
 			output = pipeline.GetMaskOutput();
+			//cvSink.GrabFrame(output);
 			std::vector<std::vector<cv::Point>> contours = pipeline.GetFilterContoursOutput();
 			frc::SmartDashboard::PutNumber("Contours Found:", contours.size());
 			double D = 8.25;
@@ -50,7 +53,7 @@ public:
 				frc::SmartDashboard::PutNumber("Px", std::abs(rRect.x-lRect.x));
 				double Px = std::abs(rRect.x-lRect.x);
 				double d2r = 2*3.14159/360.0;
-				double range = (D/(2.0*std::tan(d2r*(AOV*Px/(2.0*Sx)))))-16.0;
+				double range = (D/(2.0*std::tan((double)d2r*(AOV*Px/(2.0*Sx)))))-16.0;
 				frc::SmartDashboard::PutNumber("Target Range", range);
 				CommandBase::drivetrain->targetRange = range;
 				double centeredness = ((rRect.x+lRect.x)/2.0)-160.0;
@@ -61,7 +64,7 @@ public:
 			}
 			frc::SmartDashboard::PutBoolean("Target Found", CommandBase::drivetrain->targetFound);
 			outputStreamStd.PutFrame(output);
-		}
+		}*/
 
 	}
 
@@ -112,6 +115,7 @@ public:
 		driveWithJoystick = new DriveWithJoystick();
 		driveWithJoystick->Start();
 		pdp = new PowerDistributionPanel(0);
+		//CommandBase::gearsleeve->Raise();
 	}
 
 	void TeleopPeriodic() override {

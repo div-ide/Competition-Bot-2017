@@ -5,7 +5,7 @@
 
 #include <WPILib.h>
 
-class GearSleeve : public Subsystem {
+class GearSleeve : public frc::Subsystem {
 private:
 	// It's desirable that everything possible under private except
 	// for methods that implement subsystem capabilities
@@ -13,10 +13,13 @@ private:
 	bool isUp = false;
 	bool isUpStatus = false;
 	bool isLoaded = false;
-	double downPoint = 0.8;
-	double upPoint = 0.2;
-	Servo* gearServo;
-	DigitalInput* loadedSwitch;
+	//double downPoint = 0.8;
+	//double upPoint = 0.2;
+	double upPower = 0.9;
+	double downPower = -0.9;
+	frc::Servo* gearServo;
+	frc::DigitalInput* loadedSwitch;
+	frc::DigitalInput* upLimit;
 public:
 	GearSleeve();
 	void InitDefaultCommand();

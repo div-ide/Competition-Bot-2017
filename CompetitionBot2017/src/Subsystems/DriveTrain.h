@@ -5,16 +5,16 @@
 
 #include <WPILib.h>
 
-class DriveTrain : public Subsystem {
+class DriveTrain : public frc::Subsystem {
 private:
 	// It's desirable that everything possible under private except
 	// for methods that implement subsystem capabilities
 	bool definedYet = false;
 	const double pi = 3.14159265358979323846;
-	RobotDrive* driveBase;
-	Encoder* leftEncoder;
-	Encoder* rightEncoder;
-	ADXRS450_Gyro* gyro;
+	frc::RobotDrive* driveBase;
+	frc::Encoder* leftEncoder;
+	frc::Encoder* rightEncoder;
+	frc::ADXRS450_Gyro* gyro;
 public:
 	bool controlsSwapped = false;
 	bool isInUse = false;
