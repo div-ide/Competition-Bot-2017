@@ -10,56 +10,23 @@ void GearSleeve::InitDefaultCommand() {
 }
 
 void GearSleeve::Toggle() {
-	if (!definedYet) {
-		//gearServo = new frc::Servo(GEAR_SERVO);
-		loadedSwitch = new frc::DigitalInput(GEAR_STATUS_SWITCH);
-		upLimit = new frc::DigitalInput(GEAR_LIMIT_SWITCH_UP);
-		definedYet = true;
-	}
 	isUp = !isUp;
-	if (isUp) {
-		//gearServo->Set(upPoint);
-		/*gearMotor->Set(upPower);
-		while (upLimit->Get()) {}
-		gearMotor->Set(0.0);*/
-		isUpStatus = true;
-	} else {
-		//gearServo->Set(downPoint);
-		//frc::Wait(0.8);
-		//gearServo->StopMotor();
-		/*gearMotor->Set(downPower);
-		while (downLimit->Get()) {}
-		gearMotor->Set(0.0);*/
-		isUpStatus = false;
-	}
+	isUpStatus = isUp;
 	frc::SmartDashboard::PutBoolean("Gear Up?", isUpStatus);
 }
 
 void GearSleeve::Raise() {
-	if (!definedYet) {
-		//gearServo = new frc::Servo(GEAR_SERVO);
-		loadedSwitch = new frc::DigitalInput(GEAR_STATUS_SWITCH);
-		/*gearMotor = new frc::VictorSP(GEAR_MOTOR);
-		upLimit = new frc::DigitalInput(GEAR_LIMIT_SWITCH_UP);
-		downLimit = new frc::DigitalInput(GEAR_LIMIT_SWITCH_DOWN);*/
-		definedYet = true;
-	}
 	isUp = true;
-	//gearServo->Set(upPoint);
 	isUpStatus = true;
-	/*gearMotor->Set(upPower);
-	while (upLimit->Get()) {}
-	gearMotor->Set(0.0);*/
 	frc::SmartDashboard::PutBoolean("Gear Up?", isUpStatus);
 }
 
-bool GearSleeve::CheckLoadedStatus() {
+bool GearSleeve::Update() {
 	if (!definedYet) {
-		//gearServo = new frc::Servo(GEAR_SERVO);
 		loadedSwitch = new frc::DigitalInput(GEAR_STATUS_SWITCH);
-		/*gearMotor = new frc::VictorSP(GEAR_MOTOR);
-		upLimit = new frc::DigitalInput(GEAR_LIMIT_SWITCH_UP);
-		downLimit = new frc::DigitalInput(GEAR_LIMIT_SWITCH_DOWN);*/
+		gearMotor = new frc::VictorSP(GEAR_MOTOR);
+		upLimit = new frc::Counter(GEAR_LIMIT_SWITCH_UP);
+		downLimit = new frc::DigitalInput(GEAR_LIMIT_SWITCH_DOWN);
 		definedYet = true;
 	}
 	isLoaded = !loadedSwitch->Get();
@@ -67,14 +34,21 @@ bool GearSleeve::CheckLoadedStatus() {
 	if (isUp) {
 		isUpStatus = !isUpStatus;
 	}
+	if (isUp&&upLimit->Get()<1) {
+		gearMotor->Set(upPower);
+	} else if (!isUp&&downLimit->Get()) {
+		gearMotor->Set(downPower);
+		upLimit->Reset();
+	} else {
+		gearMotor->Set(0.0);
+	}
 	frc::SmartDashboard::PutBoolean("Gear Up?", isUpStatus);
-	/*frc::SmartDashboard::PutBoolean("Upper Limit", upLimit);
-	frc::SmartDashboard::PutBoolean("Lower Limit", downLimit);*/
+	frc::SmartDashboard::PutBoolean("Upper Limit", upLimit->Get());
+	frc::SmartDashboard::PutBoolean("Lower Limit", downLimit->Get());
 	return isLoaded;
 }
 
 void GearSleeve::Reset() {
-	//gearServo->Set(downPoint);
 	isUp = false;
 	isUpStatus = false;
 	isLoaded = false;

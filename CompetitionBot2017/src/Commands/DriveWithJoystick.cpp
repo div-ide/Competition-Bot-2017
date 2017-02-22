@@ -18,6 +18,8 @@ void DriveWithJoystick::Execute() {
 	if (std::abs(stick->GetRawAxis(0))>0.01||std::abs(stick->GetRawAxis(2))>0.01) {
 		drivetrain->isInUse = false;
 		drivetrain->Drive(stick->GetRawAxis(1)*sensitivity, stick->GetRawAxis(0)*sensitivity);
+	} else if (!drivetrain->isInUse) {
+		drivetrain->Drive(0.0, 0.0);
 	}
 }
 

@@ -22,22 +22,42 @@ using namespace frc;
 class Robot: public frc::IterativeRobot {
 public:
 
+	static void CVThread() {
+		cs::UsbCamera visionCam = CameraServer::GetInstance()->StartAutomaticCapture(0);
+		CameraServer::GetInstance()->StartAutomaticCapture(1);
+		visionCam.SetResolution(320, 240);
+		visionCam.SetExposureManual(20);
+		/*cs::CvSink cvSink = CameraServer::GetInstance()->GetVideo(visionCam.GetName());
+		cs::CvSource outputStream = CameraServer::GetInstance()->PutVideo("Augmented Display", 640, 480);
+		cv::Mat source;
+		cv::Mat output;
+		while (true) {
+			cvSink.GrabFrame(source);
+			cv::cvtColor(source, output, cv::COLOR_BGR2GRAY);
+			outputStream.PutFrame(output);
+		}*/
+	}
+
 	static void VisionThread() {
 		cs::UsbCamera visionCam = CameraServer::GetInstance()->StartAutomaticCapture(1);
 		CameraServer::GetInstance()->StartAutomaticCapture(0);
 		visionCam.SetResolution(320, 240);
 		visionCam.SetExposureManual(20);
-		/*cs::CvSink cvSink = CameraServer::GetInstance()->GetVideo(visionCam.GetName());
+		cs::CvSink cvSink = CameraServer::GetInstance()->GetVideo(visionCam.GetName());
+		/*
 		cs::CvSource outputStreamStd = CameraServer::GetInstance()->PutVideo("CV Output", 320, 240);
 		cv::Mat source;
 		cv::Mat output;
 		grip::GripPipeline pipeline;
 		while (true) {
 			cvSink.GrabFrame(source);
-			pipeline.Process(source);
-			output = pipeline.GetMaskOutput();
-			//cvSink.GrabFrame(output);
-			std::vector<std::vector<cv::Point>> contours = pipeline.GetFilterContoursOutput();
+			frc::SmartDashboard::PutNumber("scn", source.channels());
+			//cv::cvtColor(source, output, cv::COLOR_BGR2GRAY);
+			//outputStreamStd.PutFrame(source);
+
+			//pipeline.Process(source);
+			//output = pipeline.GetMaskOutput();
+			/*std::vector<std::vector<cv::Point>> contours = pipeline.GetFilterContoursOutput();
 			frc::SmartDashboard::PutNumber("Contours Found:", contours.size());
 			double D = 8.25;
 			double Sx = 320;
@@ -61,10 +81,10 @@ public:
 				CommandBase::drivetrain->targetCenter = centeredness;
 			} else {
 				CommandBase::drivetrain->targetFound = false;
-			}
-			frc::SmartDashboard::PutBoolean("Target Found", CommandBase::drivetrain->targetFound);
-			outputStreamStd.PutFrame(output);
-		}*/
+			}*/
+			//frc::SmartDashboard::PutBoolean("Target Found", CommandBase::drivetrain->targetFound);
+			//outputStreamStd.PutFrame(output);
+		//}
 
 	}
 
@@ -76,7 +96,7 @@ public:
 		autoChooser.AddObject("Blue Center", new AutonomousCommand(4));
 		autoChooser.AddObject("Blue Right", new AutonomousCommand(5));
 		frc::SmartDashboard::PutData("Drive Station", &autoChooser);
-		std::thread visionThread(VisionThread);
+		std::thread visionThread(CVThread);
 		visionThread.detach();
 	}
 
@@ -99,9 +119,7 @@ public:
 
 	void AutonomousInit() override {
 		autonomousCommand.reset(autoChooser.GetSelected());
-		if (autonomousCommand.get() != nullptr) {
-			autonomousCommand->Start();
-		}
+		autonomousCommand->Start();
 	}
 
 	void AutonomousPeriodic() override {
@@ -112,19 +130,18 @@ public:
 		if (autonomousCommand.get() != nullptr) {
 			autonomousCommand->Cancel();
 		}
-		driveWithJoystick = new DriveWithJoystick();
+		driveWithJoystick.reset(new DriveWithJoystick());
 		driveWithJoystick->Start();
 		pdp = new PowerDistributionPanel(0);
-		//CommandBase::gearsleeve->Raise();
 	}
 
 	void TeleopPeriodic() override {
 		frc::Scheduler::GetInstance()->Run();
 
-		CommandBase::gearsleeve->CheckLoadedStatus();
+		CommandBase::gearsleeve->Update();
 
 		double volts = pdp->GetVoltage();
-		//double totalCurrent = pdp->GetTotalCurrent();
+		double totalCurrent = pdp->GetTotalCurrent();
 		//double current0 = pdp->GetCurrent(0);
 		//double current1 = pdp->GetCurrent(1);
 		//double current2 = pdp->GetCurrent(2);
@@ -133,7 +150,7 @@ public:
 		//double totalPower = volts*totalCurrent;
 
 		SmartDashboard::PutNumber("Battery Voltage", volts);
-		//SmartDashboard::PutNumber("Total Current", totalCurrent);
+		SmartDashboard::PutNumber("Total Current", totalCurrent);
 		//SmartDashboard::PutNumber("TotalPower", totalPower);
 		//SmartDashboard::PutNumber("Current 0", current0);
 		//SmartDashboard::PutNumber("Current 1", current1);
@@ -148,7 +165,7 @@ public:
 
 private:
 	std::unique_ptr<frc::Command> autonomousCommand;
-	Command* driveWithJoystick;
+	std::unique_ptr<frc::Command> driveWithJoystick;
 	PowerDistributionPanel* pdp;
 	frc::SendableChooser<frc::Command*> autoChooser;
 };

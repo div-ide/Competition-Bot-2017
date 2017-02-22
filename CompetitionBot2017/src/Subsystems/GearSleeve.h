@@ -15,17 +15,18 @@ private:
 	bool isLoaded = false;
 	//double downPoint = 0.8;
 	//double upPoint = 0.2;
-	double upPower = 0.9;
-	double downPower = -0.9;
-	frc::Servo* gearServo;
+	double upPower = 0.7;
+	double downPower = -0.7;
+	frc::VictorSP* gearMotor;
 	frc::DigitalInput* loadedSwitch;
-	frc::DigitalInput* upLimit;
+	frc::Counter* upLimit;
+	frc::DigitalInput* downLimit;
 public:
 	GearSleeve();
 	void InitDefaultCommand();
 	void Toggle();
 	void Raise();
-	bool CheckLoadedStatus();
+	bool Update();
 	void Reset();
 };
 
