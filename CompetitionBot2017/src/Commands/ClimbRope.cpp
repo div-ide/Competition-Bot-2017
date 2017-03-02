@@ -12,12 +12,12 @@ void ClimbRope::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void ClimbRope::Execute() {
-	winch->SetMotorPower(1.0);
+	winch->SetMotorPower(1.0);//setting motor power
 }
 
 // Make this return true when this Command no longer needs to run execute()
 bool ClimbRope::IsFinished() {
-	return CommandBase::oi->GetJoystick()->GetRawButton(8);
+	return CommandBase::oi->GetJoystick()->GetRawButton(8);// gets the imput from button number 8 and uses that to decide wethere or not to end it
 }
 
 // Called once after isFinished returns true
