@@ -12,8 +12,8 @@ public:
 	void End();
 	void Interrupted();
 private:
-	double inches;
-	double encoderStart;
+	double inches;// definitions
+	double encoderStart;//even more
 	double encoderTarget;
 };
 
