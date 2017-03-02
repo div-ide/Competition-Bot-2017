@@ -4,7 +4,7 @@
 #include <memory> //we tell the program to remember this programming even if we are in a different code
 #include <string>
 
-#include <Commands/Command.h> //We include a program that within it's code it's gonna have something tha affects this code as well
+#include <Commands/Command.h> //We include a program that within it's code it's gonna have something that affects this code as well
 
 #include "OI.h"//same as above for these commands right here
 #include "Subsystems/Winch.h"
