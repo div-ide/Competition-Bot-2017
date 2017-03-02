@@ -1,6 +1,6 @@
-#include "AutonomousCommand.h"
+#include "AutonomousCommand.h"// I really shouldn't have to comment include statements
 
-#include "DriveByDistance.h"
+#include "DriveByDistance.h"//but these are important
 #include "TurnByAngle.h"
 #include "FullAutoPlaceGear.h"
 
@@ -24,8 +24,8 @@ AutonomousCommand::AutonomousCommand(int id) {
 
 	AddSequential(new DriveByDistance(70.0));
 
-	if (id == REDL||id == BLUEL) {
-		AddSequential(new TurnByAngle(30.0));
+	if (id == REDL||id == BLUEL) {//fun fact these are defined in the include statements 
+		AddSequential(new TurnByAngle(30.0));//all of this is just taking the stuff we've defined the .h things and using it
 		AddSequential(new DriveByDistance(10.0));
 	} else if (id == REDR||id == REDL) {
 		AddSequential(new TurnByAngle(-30.0));
