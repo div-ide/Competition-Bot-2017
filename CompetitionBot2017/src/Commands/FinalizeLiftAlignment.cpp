@@ -14,15 +14,15 @@ void FinalizeLiftAlignment::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void FinalizeLiftAlignment::Execute() {
 	drivetrain->isInUse = true;
-	double s = 0.0;
-	double a = 0.0;
+	double s = 0.0;// lookie its a definition
+	double a = 0.0;// even more, buy one get one free
 	if (drivetrain->targetFound) {
 		if (drivetrain->targetCenter < -5.0) {
-			s = 0.45;
-			a = 0.05;
+			s = 0.45;// setting the variable 
+			a = 0.05;//buy one varible set get one free
 		} else if (drivetrain->targetCenter > 5.0) {
-			s = -0.45;
-			a = 0.05;
+			s = -0.45;//and a switchy
+			a = 0.05;//see we inversed the power
 		}
 		if (drivetrain->targetRange > 5.0) {
 			a += 0.47;
