@@ -6,8 +6,8 @@
 class AutonomousCommand : public CommandGroup {
 public:
 	AutonomousCommand(int id);
-	const int REDL = 0;
-	const int REDC = 1;
+	const int REDL = 0;// these are things that do stuff
+	const int REDC = 1;//all joking aside we define stuff here to use later  
 	const int REDR = 2;
 	const int BLUEL = 3;
 	const int BLUEC = 4;
