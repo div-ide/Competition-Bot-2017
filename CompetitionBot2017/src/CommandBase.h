@@ -1,6 +1,5 @@
 #ifndef COMMAND_BASE_H 
-#define COMMAND_BASE_H //we define the title of the code to be used in other codes outside this sheet (in this case we define the name as
-			//COMMAND_BASE_H)
+#define COMMAND_BASE_H //we define the title of the code to be used in other codes outside this sheet (in this case we define the name as COMMAND_BASE_H)
 
 #include <memory> //we tell the program to remember this programming even if we are in a different code
 #include <string>
